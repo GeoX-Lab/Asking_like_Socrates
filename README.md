@@ -5,7 +5,7 @@
 <a href='coming soon'><img src='https://img.shields.io/badge/Paper-Arxiv%20(Coming%20Soon)-red'></a>
 <a href='https://huggingface.co/ShaoRun/RS-EoT-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
 <a href='https://huggingface.co/datasets/ShaoRun/RS-EoT-4K'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-green'></a>
-<a href='coming_soon'><img src='https://img.shields.io/badge/Project-Page-orange'></a>
+<a href='https://geox-lab.github.io/Asking_like_Socrates/'><img src='https://img.shields.io/badge/Project-Page-orange'></a>
 
 **Run Shao**<sup>1,2,\*</sup>, **Ziyu Li**<sup>1,\*</sup>, **Zhaoyang Zhang**<sup>1</sup>, **Linrui Xu**<sup>1</sup>, **Xinran He**<sup>2</sup>, **Hongyuan Yuan**<sup>1,2</sup>,<br> **Bolei He**<sup>2</sup>, **Yongxing Dai**<sup>2</sup>, **Yiming Yan**<sup>3</sup>, **Yijun Chen**<sup>3</sup>, **Wang Guo**<sup>1</sup>, **Haifeng Li**<sup>1,†</sup>
 
