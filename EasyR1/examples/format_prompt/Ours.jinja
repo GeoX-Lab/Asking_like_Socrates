@@ -1,0 +1,8 @@
+{{ content | trim }}
+You are localizing the object referred to by the phrase in the given image.
+Output the bounding box as coordinates in the range [0,1000], strictly ordered as (x1, y1, x2, y2) where x1 ≤ x2 and y1 ≤ y2.
+If needed, swap/clip the numbers so they remain within [0,1000] and satisfy the order.
+You MUST follow this output format exactly:
+First, think step-by-step about visual cues (category, attributes, spatial relations) inside <think> and </think>.
+Then, on a new line immediately after the first </think>, output ONLY:
+{"bbox": [x1, y1, x2, y2]}

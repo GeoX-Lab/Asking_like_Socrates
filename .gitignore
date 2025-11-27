@@ -1,0 +1,111 @@
+# --- Python General ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Virtual Environments ---
+# Common names for virtual envs
+venv/
+env/
+.env
+.venv/
+conda/
+.conda/
+
+# --- Installer logs ---
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Unit Test / Coverage ---
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+
+# --- IDEs / Editors ---
+# VS Code
+.vscode/
+# PyCharm / IntelliJ
+.idea/
+# Vim
+*.swp
+*.swo
+
+# --- OS Specific ---
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Deep Learning / Large Files (Crucial!) ---
+# Pytorch / Hugging Face weights
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.h5
+*.onnx
+
+# Tensorboard / WandB logs
+runs/
+wandb/
+*.log
+
+# Output directories (Training results)
+output/
+outputs/
+checkpoints/
+saves/
+results/
+predictions/
+
+# --- LLaMA-Factory / EasyR1 Specific ---
+# 忽略 LLaMA-Factory 或 EasyR1 生成的缓存和保存路径
+cache/
+evaluation/
+*_cache/
+
+# --- Project Specific ---
+# 如果你的 demo_data 包含大量图片，建议忽略 images 文件夹，只保留 json 示例
+# SocraticAgent/demo_data/images/
+# 但是如果你只想保留几个示例图片，就不需要取消上面的注释
+
+# Private Environment Variables (API Keys)
+.env
+.env.local

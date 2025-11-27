@@ -1,0 +1,142 @@
+[
+    {
+        "id": "Final_Data/v1.2",
+        "image": "03635_0000.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] How many baseball fields are depicted in this image?"
+            },
+            {
+                "from": "gpt",
+                "value": "2"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P4724_0133.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Based on the image, respond to this question with a short answer: What type of vehicles are visible?."
+            },
+            {
+                "from": "gpt",
+                "value": "Small vehicles"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P6297_0011.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Use the provided image to answer the question: What is the main type of area in the image? Provide your answer as short as possible."
+            },
+            {
+                "from": "gpt",
+                "value": "Residential"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P0874_0001.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Use the provided image to answer the question: How many small vehicles are positioned at the top edge within the parking area? Provide your answer as short as possible."
+            },
+            {
+                "from": "gpt",
+                "value": "2"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "03527_0000.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Based on the image, respond to this question with a short answer: What feature divides the landscape in the image?."
+            },
+            {
+                "from": "gpt",
+                "value": "Dirt road"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "01154_0000.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] What is the answer to the following question What type of highway is adjacent to the service area?"
+            },
+            {
+                "from": "gpt",
+                "value": "Divided highway"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P8204_0099.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Based on the image, respond to this question with a short answer: Are there any vehicles in the bottom-middle of the image?."
+            },
+            {
+                "from": "gpt",
+                "value": "Yes"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P0869_0001.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] Question: How many small vehicles are visible in the image? Short answer:"
+            },
+            {
+                "from": "gpt",
+                "value": "6"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P2653_0029.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] What type of area is shown in the image?"
+            },
+            {
+                "from": "gpt",
+                "value": "urban"
+            }
+        ]
+    },
+    {
+        "id": "Final_Data/v1.2",
+        "image": "P2710_0006.png",
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\n[vqa] What is the answer to the following question How many storage tanks are visible?"
+            },
+            {
+                "from": "gpt",
+                "value": "4"
+            }
+        ]
+    }
+]
