@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asking like Socrates: Socrates helps VLMs understand remote sensing images</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Academicons for specific academic icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        h1, h2, h3, .title-font {
+            font-family: 'Google Sans', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .teaser-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn-academic {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-academic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        sup {
+            font-size: 0.7em;
+            top: -0.4em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="max-w-6xl mx-auto pt-16 pb-10 px-4 text-center">
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl font-bold mb-8 leading-tight title-font">
+            Asking like Socrates: <br class="hidden md:block" />
+            <span class="gradient-text">Socrates helps VLMs understand <br> remote sensing images</span>
+        </h1>
+        
+        <!-- Authors -->
+        <div class="text-lg md:text-xl mb-6 leading-relaxed">
+            <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 font-medium text-gray-800">
+                <span class="whitespace-nowrap">Run Shao<sup>1,2,*</sup></span>
+                <span class="whitespace-nowrap">Ziyu Li<sup>1,*</sup></span>
+                <span class="whitespace-nowrap">Zhaoyang Zhang<sup>1</sup></span>
+                <span class="whitespace-nowrap">Linrui Xu<sup>1</sup></span>
+                <span class="whitespace-nowrap">Xinran He<sup>2</sup></span>
+                <span class="whitespace-nowrap">Hongyuan Yuan<sup>1,2</sup></span>
+                <span class="whitespace-nowrap">Bolei He<sup>2</sup></span>
+                <span class="whitespace-nowrap">Yongxing Dai<sup>2</sup></span>
+                <span class="whitespace-nowrap">Yiming Yan<sup>3</sup></span>
+                <span class="whitespace-nowrap">Yijun Chen<sup>3</sup></span>
+                <span class="whitespace-nowrap">Wang Guo<sup>1</sup></span>
+                <span class="whitespace-nowrap">Haifeng Li<sup>1,†</sup></span>
+            </div>
+        </div>
+
+        <!-- Affiliations -->
+        <div class="text-sm md:text-base text-gray-600 mb-6 space-y-1">
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-1">
+                <span><sup>1</sup>School of Geosciences and Info-Physics, Central South University</span>
+                <span><sup>2</sup>Baidu Inc.</span>
+                <span><sup>3</sup>School of Earth Sciences, Zhejiang University</span>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="text-xs text-gray-500 mb-8 italic">
+            <span class="mr-4"><sup>*</sup>Equal contribution</span>
+            <span><sup>†</sup>Corresponding author</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <!-- Arxiv Link -->
+            <a href="#" class="btn-academic bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800">
+                <i class="ai ai-arxiv text-xl"></i>
+                <span>arXiv (Coming soon)</span>
+            </a>
+            <!-- Github Link -->
+            <a href="https://github.com/GeoX-Lab/Asking_like_Socrates" class="btn-academic bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800">
+                <i class="fab fa-github text-xl"></i>
+                <span>Code</span>
+            </a>
+            <!-- HuggingFace Link -->
+            <a href="https://huggingface.co/ShaoRun/RS-EoT-7B" class="btn-academic bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800">
+                <span class="text-xl">🤗</span>
+                <span>Models</span>
+            </a>
+            <!-- HuggingFace Link -->
+            <a href="https://huggingface.co/datasets/ShaoRun/RS-EoT-4K" class="btn-academic bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800">
+                <span class="text-xl">🤗</span>
+                <span>Dataset</span>
+            </a>
+        </div>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 mb-16">
+        <div class="bg-white p-6 rounded-3xl teaser-shadow border border-gray-100">
+            
+            <h3 class="text-2xl font-bold mb-8 text-center text-slate-800 title-font">
+                Rethinking Reasoning in Remote Sensing
+            </h3>
+
+            <!-- Figure 1 Image Insertion -->
+            <div class="flex justify-center items-center">
+                <img src="assets/Fig1.jpg" class="w-full h-auto rounded-2xl shadow-sm">
+            </div>
+            
+            <p class="mt-8 text-sm text-center text-gray-500 italic max-w-4xl mx-auto">
+                <strong>Figure 1:</strong> Illustration of the pseudo reasoning problem and our RS-EoT solution. 
+                (a) Existing models show pseudo reasoning (thinking without gain). 
+                (b) We attribute this to the "Glance Effect". 
+                (c) Our model, RS-EoT-7B, successfully solves the task by iteratively reasoning and seeking visual evidence.
+            </p>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section class="max-w-4xl mx-auto px-4 mb-20">
+        <h2 class="text-3xl font-bold text-center mb-8 title-font">Abstract</h2>
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <p class="text-justify text-gray-700 leading-relaxed text-lg">
+                Recent multimodal reasoning models, inspired by DeepSeek-R1, have significantly advanced vision–language systems. However, in remote sensing (RS) tasks, we observe widespread <strong>pseudo reasoning</strong>: models narrate the process of reasoning rather than genuinely reason toward the correct answer based on visual evidence. We attribute this to the <strong>Glance Effect</strong>, where a single, coarse perception of large-scale RS imagery results in incomplete understanding and reasoning based on linguistic self-consistency instead of visual evidence. 
+                <br><br>
+                To address this, we propose <strong>RS-EoT (Remote Sensing Evidence-of-Thought)</strong>, a language-driven, iterative visual evidence-seeking paradigm. To instill this paradigm, we propose SocraticAgent, a self-play multi-agent system that synthesizes reasoning traces via alternating cycles of reasoning and visual inspection. To enhance and generalize these patterns, we propose a two-stage progressive RL strategy: first, RL on fine-grained Grounding tasks to enhance RS-EoT capabilities, followed by RL on RS VQA to generalize to broader understanding scenarios. Experiments show RS-EoT achieves state-of-the-art performance on multiple RS VQA and grounding benchmarks. Analyses reveal clear iterative cycles of reasoning and evidence seeking, confirming RS-EoT mitigates the Glance Effect and enables genuine evidence-grounded reasoning.
+            </p>
+        </div>
+    </section>
+
+    <section class="bg-white py-20 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-16 title-font">Methodology: Asking like Socrates</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+                <!-- Part 1: SocraticAgent -->
+                <div class="flex flex-col p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-3xl shadow-md shrink-0">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800">1. SocraticAgent</h3>
+                    </div>
+                    
+                    <div class="space-y-4 text-gray-600 leading-relaxed flex-grow">
+                        <p>
+                            Inspired by the <strong>Socratic Method</strong>—which fosters knowledge acquisition through a structured process of questioning rather than direct instruction—we designed <strong>SocraticAgent</strong>.
+                        </p>
+                        <p>
+                            It is a self-play multi-agent system comprising a <strong>Reasoner</strong> (pure-text logic) and a <strong>Perceiver</strong> (visual interface). They engage in a multi-turn dialogue:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 pl-2">
+                            <li>The <strong>Reasoner</strong> poses incremental perceptual questions.</li>
+                            <li>The <strong>Perceiver</strong> provides grounded visual answers.</li>
+                            <li>A self-play prompting mechanism ensures detailed, step-by-step reasoning traces without "jumping" to conclusions.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Part 2: Two-Stage RL -->
+                <div class="flex flex-col p-8 rounded-3xl bg-gradient-to-br from-purple-50 to-white border border-purple-100 shadow-lg hover:shadow-xl transition duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-3xl shadow-md shrink-0">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800">2. Two-Stage Progressive RL</h3>
+                    </div>
+                    
+                    <div class="space-y-4 text-gray-600 leading-relaxed flex-grow">
+                        <p>
+                            To enhance and generalize the RS-EoT capability, we employ a progressive Reinforcement Learning pipeline:
+                        </p>
+                        <div class="space-y-4 mt-4">
+                            <div class="flex gap-3">
+                                <span class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-sm h-fit whitespace-nowrap">Stage 1</span>
+                                <div>
+                                    <strong class="text-slate-700">RL-Grounding ("Iron Sharpens Iron"):</strong><br>
+                                    We first train on fine-grained grounding tasks. Since these tasks demand precise visual evidence, they specifically strengthen the iterative evidence-seeking behavior.
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="bg-pink-100 text-pink-700 font-bold px-2 py-1 rounded text-sm h-fit whitespace-nowrap">Stage 2</span>
+                                <div>
+                                    <strong class="text-slate-700">RL-VQA (Generalization):</strong><br>
+                                    We then generalize to broader VQA scenarios. To prevent reward hacking on simple datasets, we introduce a novel <strong>multiple-choice reconstruction strategy</strong> with graded rewards.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Qualitative Results / Cases -->
+    <section class="max-w-7xl mx-auto px-4 py-24">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 title-font text-slate-800">Qualitative Analysis</h2>
+        
+        <!-- Case Tabs -->
+        <div class="flex flex-wrap justify-center mb-12 gap-3">
+            <button onclick="switchTab('case1')" id="btn-case1" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 bg-slate-800 text-white shadow-lg transform hover:-translate-y-0.5 ring-2 ring-slate-800 ring-offset-2">
+                VQA #1
+            </button>
+            <button onclick="switchTab('case2')" id="btn-case2" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md">
+                VQA #2
+            </button>
+            <button onclick="switchTab('case3')" id="btn-case3" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md">
+                Caption
+            </button>
+            <button onclick="switchTab('case4')" id="btn-case4" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md">
+                Grounding #1
+            </button>
+            <button onclick="switchTab('case5')" id="btn-case5" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-200 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md">
+                Grounding #2
+            </button>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-2xl shadow-slate-200 border border-slate-100 overflow-hidden min-h-[600px]">
+            
+            <!-- Case 1 -->
+            <div id="case1" class="grid grid-cols-1 lg:grid-cols-2 h-full tab-content">
+                <!-- Left Column: Image & Query -->
+                <div class="bg-slate-50 p-8 lg:p-12 flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <!-- Query Card -->
+                    <div class="w-full bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Input Query</div>
+                        <p class="text-slate-800 font-medium text-lg leading-relaxed">Assuming a recently landed aircraft, is there an available gate with a jet bridge for it?</p>
+                    </div>
+                    
+                    <!-- Image Container -->
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                        <img src="assets/case1.png" alt="Case 1 Image" class="w-full h-auto object-contain bg-slate-200">
+                    </div>
+                </div>
+                
+                <!-- Right Column: Reasoning -->
+                <div class="p-8 lg:p-12 bg-white flex flex-col h-full">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shadow-sm">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">RS-EoT-7B Reasoning</h3>
+                            <p class="text-xs text-slate-400 font-mono">Remote Sensing Evidence-of-Thought Generation</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow overflow-hidden relative">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 h-full overflow-y-auto reasoning-scroll font-mono text-sm leading-relaxed text-slate-700">
+                            <div class="mb-4">
+                                <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mb-2">&lt;think&gt;</span>
+                                <div class="pl-4 border-l-2 border-slate-300 space-y-4">
+                                    <p>Alright, I will reason in a self Q&A style and give the final reply. Begin with a global check to confirm this is an airport scene and that a recently landed aircraft is present, establishing the overall context before focusing on gates and jet bridges.</p>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                        <div class="flex gap-2 mb-1">
+                                            <span class="text-blue-600 font-bold">Q:</span>
+                                            <span class="text-slate-800 font-semibold">Is this scene an airport with visible aircraft, runways, or taxiways?</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <span class="text-green-600 font-bold flex-shrink-0">→</span>
+                                            <span class="text-slate-600">Let’s look at the image. Yes, this scene is an airport. I can see multiple aircraft parked on a large paved area...</span>
+                                        </div>
+                                    </div>
+
+                                    <p>To determine if a recently landed aircraft can connect to a jet bridge, the key is whether any gate position is empty; if so, the aircraft can park there. I will ask a targeted question.</p>
+
+                                    <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                        <div class="flex gap-2 mb-1">
+                                            <span class="text-blue-600 font-bold">Q:</span>
+                                            <span class="text-slate-800 font-semibold">Is there at least one empty jet bridge gate position visible?</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <span class="text-green-600 font-bold flex-shrink-0">→</span>
+                                            <span class="text-slate-600">Let’s look at the image. <strong class="text-green-700">Yes, there is at least one empty jet bridge gate position visible.</strong> In the upper central part...</span>
+                                        </div>
+                                    </div>
+
+                                    <p>Global view confirms an airport with multiple aircraft and jet bridges. Targeted check indicates at least one empty jet bridge gate position. Therefore, a recently landed aircraft could park at that gate.</p>
+                                </div>
+                                <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mt-2">&lt;/think&gt;</span>
+                            </div>
+                            
+                            <div class="mt-6 flex items-center gap-3 bg-green-50 border border-green-100 p-4 rounded-xl">
+                                <span class="text-xs font-bold text-green-800 uppercase tracking-widest">Final Answer</span>
+                                <div class="h-4 w-px bg-green-200"></div>
+                                <span class="text-lg font-bold text-green-700">Yes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case 2 -->
+            <div id="case2" class="grid grid-cols-1 lg:grid-cols-2 h-full tab-content hidden">
+                <div class="bg-slate-50 p-8 lg:p-12 flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <div class="w-full bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Input Query</div>
+                        <p class="text-slate-800 font-medium text-lg leading-relaxed">Are the two ships sailing in the same direction in the picture?</p>
+                    </div>
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                        <img src="assets/case2.png" alt="Case 2 Image" class="w-full h-auto object-contain bg-slate-200">
+                    </div>
+                </div>
+                <div class="p-8 lg:p-12 bg-white flex flex-col h-full">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shadow-sm">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">RS-EoT-7B Reasoning</h3>
+                            <p class="text-xs text-slate-400 font-mono">Remote Sensing Evidence-of-Thought Generation</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 h-full overflow-y-auto reasoning-scroll font-mono text-sm leading-relaxed text-slate-700">
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mb-2">&lt;think&gt;</span>
+                        <div class="pl-4 border-l-2 border-slate-300 space-y-4">
+                            <p>Alright, I will reason in a self Q&A style and give the final reply. Begin with a global check to confirm there are indeed two ships...</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Are there exactly two ships visible in the image?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Let’s look at the image. I can see two distinct objects that appear to be ships...</span></div>
+                            </div>
+                            <p>Next, determine their relative orientation by checking if the right ship’s bow points toward the lower-left...</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Does the ship on the right side of the image have its bow pointing toward the lower-left?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Let’s look at the image. The ship on the right side has its bow pointing towards the upper-right. The left ship points lower-left. <strong class="text-red-600">Different directions.</strong></span></div>
+                            </div>
+                        </div>
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mt-4 mb-4">&lt;/think&gt;</span>
+                        <div class="mt-2 flex items-center gap-3 bg-green-50 border border-green-100 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-green-800 uppercase tracking-widest">Final Answer</span>
+                            <div class="h-4 w-px bg-green-200"></div>
+                            <span class="text-lg font-bold text-green-700">No</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case 3 -->
+            <div id="case3" class="grid grid-cols-1 lg:grid-cols-2 h-full tab-content hidden">
+                <div class="bg-slate-50 p-8 lg:p-12 flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <div class="w-full bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Input Query</div>
+                        <p class="text-slate-800 font-medium text-lg leading-relaxed">Describe this remote sensing image.</p>
+                    </div>
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                        <img src="assets/case3.png" alt="Case 3 Image" class="w-full h-auto object-contain bg-slate-200">
+                    </div>
+                </div>
+                <div class="p-8 lg:p-12 bg-white flex flex-col h-full">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shadow-sm">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">RS-EoT-7B Reasoning</h3>
+                            <p class="text-xs text-slate-400 font-mono">Remote Sensing Evidence-of-Thought Generation</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 h-full overflow-y-auto reasoning-scroll font-mono text-sm leading-relaxed text-slate-700">
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mb-2">&lt;think&gt;</span>
+                        <div class="pl-4 border-l-2 border-slate-300 space-y-4">
+                            <p>Alright, I will reason in a self Q&A style. Start with a broad global assessment.</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Is the scene predominantly urban/built-up?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Let’s look at the image. The scene contains a large stadium... predominantly urban/built-up.</span></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Is there a large stadium with a green field?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes, there is a large stadium...</span></div>
+                            </div>
+                            <p>Global view shows a predominantly urban scene centered on a stadium... Ready to deliver the caption.</p>
+                        </div>
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mt-4 mb-4">&lt;/think&gt;</span>
+                        <div class="mt-2 p-4 bg-slate-100 rounded-xl border border-slate-200 italic text-slate-600">
+                            "A high-resolution urban scene centered on a multi-purpose stadium complex. At the heart of the image is a rectangular green playing field encircled by a red running track... The overall layout exhibits a clear contrast between the stadium’s oval athletics track and the rectilinear arrangement of courts."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case 4 -->
+            <div id="case4" class="grid grid-cols-1 lg:grid-cols-2 h-full tab-content hidden">
+                <div class="bg-slate-50 p-8 lg:p-12 flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <div class="w-full bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Input Query</div>
+                        <p class="text-slate-800 font-medium text-lg leading-relaxed">Locate The largest cruise ship in the image. Return the coordinates as "[x1, y1, x2, y2]".</p>
+                    </div>
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                        <img src="assets/case4.png" alt="Case 4 Image" class="w-full h-full object-contain bg-slate-200">
+                    </div>
+                </div>
+                <div class="p-8 lg:p-12 bg-white flex flex-col h-full">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shadow-sm">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">RS-EoT-7B Reasoning</h3>
+                            <p class="text-xs text-slate-400 font-mono">Remote Sensing Evidence-of-Thought Generation</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 h-full overflow-y-auto reasoning-scroll font-mono text-sm leading-relaxed text-slate-700">
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mb-2">&lt;think&gt;</span>
+                        <div class="pl-4 border-l-2 border-slate-300 space-y-4">
+                            <p>Alright, I will reason in a self Q&A style... Start with a global scan to confirm the presence of maritime context.</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Is there a large water body visible?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes, there is a large water body...</span></div>
+                            </div>
+                            <p>Next, I need to localize large ship-like vessels...</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Are there any large ship-like vessels?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes... in the lower central part... distinct hull...</span></div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Does the long white vessel have passenger cabins?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes. On its deck, multiple passenger cabins are visible.</span></div>
+                            </div>
+                            <p>Focused inspection identifies a prominent long white vessel... consistent with a cruise ship.</p>
+                        </div>
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mt-4 mb-4">&lt;/think&gt;</span>
+                        <div class="mt-2 flex items-center gap-3 bg-green-50 border border-green-100 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-green-800 uppercase tracking-widest">Coordinates</span>
+                            <div class="h-4 w-px bg-green-200"></div>
+                            <span class="text-lg font-bold text-green-700 font-mono">[341, 575, 476, 647]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case 5 -->
+            <div id="case5" class="grid grid-cols-1 lg:grid-cols-2 h-full tab-content hidden">
+                <div class="bg-slate-50 p-8 lg:p-12 flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <div class="w-full bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Input Query</div>
+                        <p class="text-slate-800 font-medium text-lg leading-relaxed">Locate the white car in the image. Return the coordinates as "[x1, y1, x2, y2]".</p>
+                    </div>
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-md border-4 border-white">
+                        <img src="assets/case5.png" alt="Case 5 Image" class="w-full h-full object-contain bg-slate-200">
+                    </div>
+                </div>
+                <div class="p-8 lg:p-12 bg-white flex flex-col h-full">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shadow-sm">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">RS-EoT-7B Reasoning</h3>
+                            <p class="text-xs text-slate-400 font-mono">Remote Sensing Evidence-of-Thought Generation</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 h-full overflow-y-auto reasoning-scroll font-mono text-sm leading-relaxed text-slate-700">
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mb-2">&lt;think&gt;</span>
+                        <div class="pl-4 border-l-2 border-slate-300 space-y-4">
+                            <p>Alright, I will reason in a self Q&A style... Start with a global check to understand the scene layout.</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Is there a paved road or parking area?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes, there are several paved areas... large paved area in the upper left.</span></div>
+                            </div>
+                            <p>Next, confirm the car's presence in that area.</p>
+                            <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="flex gap-2 mb-1"><span class="text-blue-600 font-bold">Q:</span><span class="text-slate-800 font-semibold">Is there a white car parked on the large paved area?</span></div>
+                                <div class="flex gap-2"><span class="text-green-600 font-bold flex-shrink-0">→</span><span class="text-slate-600">Yes, there is a white car parked on the large paved area in the upper-left quadrant.</span></div>
+                            </div>
+                            <p>Global observation revealed paved roads... focused observation confirmed a white car. Coordinates returned.</p>
+                        </div>
+                        <span class="inline-block px-2 py-1 bg-slate-200 text-slate-600 text-xs font-bold rounded uppercase tracking-wider mt-4 mb-4">&lt;/think&gt;</span>
+                        <div class="mt-2 flex items-center gap-3 bg-green-50 border border-green-100 p-4 rounded-xl">
+                            <span class="text-xs font-bold text-green-800 uppercase tracking-widest">Coordinates</span>
+                            <div class="h-4 w-px bg-green-200"></div>
+                            <span class="text-lg font-bold text-green-700 font-mono">[128, 81, 177, 115]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Citation -->
+    <section class="bg-slate-900 text-slate-300 py-16">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-2xl font-bold text-white mb-8 title-font">Citation</h2>
+            <div class="bg-slate-800 p-6 rounded-xl font-mono text-sm overflow-x-auto border border-slate-700 shadow-inner">
+<pre>Coming soon</pre>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-10 text-gray-500 text-sm bg-slate-950 border-t border-slate-900">
+        <p>Project page template inspired by <a href="https://nerfies.github.io" class="text-blue-400 hover:text-blue-300 transition">Nerfies</a>.</p>
+    </footer>
+
+    <!-- Simple Tab Switching Script -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            // Show selected content
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Reset all buttons to default style
+            const buttons = document.querySelectorAll('button[id^="btn-case"]');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-gray-900', 'text-white', 'shadow-md');
+                btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100', 'border', 'border-gray-200');
+            });
+
+            // Activate selected button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100', 'border', 'border-gray-200');
+            activeBtn.classList.add('bg-gray-900', 'text-white', 'shadow-md');
+        }
+    </script>
+</body>
+</html>
