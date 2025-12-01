@@ -2,7 +2,7 @@
 
 # Asking like Socrates: Socrates Helps VLMs Understand Remote Sensing Images
 
-<a href='coming soon'><img src='https://img.shields.io/badge/Paper-Arxiv%20(Coming%20Soon)-red'></a>
+<a href='https://arxiv.org/abs/2511.22396'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
 <a href='https://huggingface.co/ShaoRun/RS-EoT-7B'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
 <a href='https://huggingface.co/datasets/ShaoRun/RS-EoT-4K'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-green'></a>
 <a href='https://geox-lab.github.io/Asking_like_Socrates/'><img src='https://img.shields.io/badge/Project-Page-orange'></a>
