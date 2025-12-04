@@ -279,7 +279,12 @@ A lightweight RL training framework supporting GRPO/PPO, implementing our **Two-
 If you find our work helpful, please cite:
 
 ```bibtex
-coming soon
+@article{shao2025asking,
+  title={Asking like Socrates: Socrates helps VLMs understand remote sensing images},
+  author={Shao, Run and Li, Ziyu and Zhang, Zhaoyang and Xu, Linrui and He, Xinran and Yuan, Hongyuan and He, Bolei and Dai, Yongxing and Yan, Yiming and Chen, Yijun and others},
+  journal={arXiv preprint arXiv:2511.22396},
+  year={2025}
+}
 ```
 
 ## 📄 License
